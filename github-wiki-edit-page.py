@@ -29,16 +29,21 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("page", help="local path of page")
+    parser.add_argument("-k","--skip-pull", action="store_true", help="skip git pull at start")
     args = parser.parse_args(sys.argv[1:])
 
     # Get normalised absolute path to page.
     page = os.path.abspath(args.page)
 
     # Automate single page editing workflow.
-    # Call pull to avoid merge conflicts.
-    print "> pull"
-    pull(page)
-    raw_input("> enter to continue...")
+    # Pull by default for safety.
+    if not args.skip_pull:
+        # Call pull to avoid merge conflicts.
+        print "> pull"
+        pull(page)
+        raw_input("> enter to continue...")
+    else:
+        print "> skipped pull"
     print "> edit"
     edit(page)
     print "> add"
